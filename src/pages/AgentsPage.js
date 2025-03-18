@@ -33,7 +33,7 @@ const AgentsPage = () => {
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/agents");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/agents`);
       setAgents(response.data);
     } catch (error) {
       console.error("Error fetching agents:", error);
@@ -42,7 +42,7 @@ const AgentsPage = () => {
 
   const fetchTeams = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/agents/get-teams");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/agents/get-teams`);
       setTeams(response.data);
     } catch (error) {
       console.error("Error fetching teams:", error);
@@ -52,7 +52,7 @@ const AgentsPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this agent?")) return;
     try {
-      await axios.delete(`https://localhost:7048/api/Auth/delete-agent/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL_LOCAL}/delete-agent/${id}`);
       setAgents((prev) => prev.filter((agent) => agent.id !== id));
     } catch (error) {
       console.error("Error deleting agent:", error);
@@ -76,7 +76,7 @@ const AgentsPage = () => {
     setSelectedAgent(agent);
 
     try {
-      const response = await axios.get(`https://localhost:7048/api/Agents/${agent.id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Agents/${agent.id}`);
       const agentData = response.data;
 
       setNewAgent({
@@ -136,12 +136,12 @@ const AgentsPage = () => {
       formData.append("LinkedUserId", linkedUserId);
   
       if (selectedAgent) {
-        await axios.put(`https://localhost:7048/api/Agents/update-agent/${selectedAgent.id}`, formData, {
+        await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Agents/update-agent/${selectedAgent.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Agent updated successfully!");
       } else {
-        await axios.post("https://localhost:7048/api/Auth/create-agent", formData, {
+        await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/create-agent`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Agent added successfully!");
@@ -159,7 +159,7 @@ const AgentsPage = () => {
 
   const resendResetLink = async (email) => {
     try {
-      await axios.post("https://localhost:7048/api/Auth/resend-reset-link", { email });
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/resend-reset-link`, { email });
       alert("Reset link has been sent to the agent's email.");
     } catch (error) {
       console.error("Error sending reset link:", error);
@@ -195,7 +195,7 @@ const AgentsPage = () => {
               <TableRow key={agent.id}>
                 <TableCell>{agent.id}</TableCell>
                 <TableCell>
-                  <Avatar src={`https://localhost:7048${agent.profileImageUrl}`} alt={agent.fullName} sx={{ width: 50, height: 50 }} />
+                  <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${agent.profileImageUrl}`} alt={agent.fullName} sx={{ width: 50, height: 50 }} />
                 </TableCell>
                 <TableCell>{agent.fullName}</TableCell>
                 <TableCell>{agent.email}</TableCell>

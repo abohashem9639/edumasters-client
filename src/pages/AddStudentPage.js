@@ -74,7 +74,7 @@ const AddStudentPage = () => {
   // استيراد قائمة المسؤولين بناءً على النوع المحدد
   useEffect(() => {
     if (student.salesResponsibleType) {
-      axios.get(`https://localhost:7048/api/Students/get-sales-responsibles?salesResponsibleType=${student.salesResponsibleType}`)
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/get-sales-responsibles?salesResponsibleType=${student.salesResponsibleType}`)
         .then(response => {
           setSalesResponsibles(response.data);
         })
@@ -165,7 +165,7 @@ const AddStudentPage = () => {
     try {
       // رفع بيانات الطالب
       const response = await axios.post(
-        "https://localhost:7048/api/Students",
+        `${process.env.REACT_APP_API_URL_LOCAL}/Students`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -209,7 +209,7 @@ const AddStudentPage = () => {
   
       try {
         await axios.post(
-          `https://localhost:7048/api/Students/${studentId}/upload-files`,
+          `${process.env.REACT_APP_API_URL_LOCAL}/Students/${studentId}/upload-files`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -401,7 +401,7 @@ const AddStudentPage = () => {
       <MenuItem key={responsible.id} value={responsible.id}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
-            src={`https://localhost:7048${responsible.profileImageUrl || "/uploads/default-avatar.png"}`}
+            src={`${process.env.REACT_APP_API_URL_IMAGE}${responsible.profileImageUrl || "/uploads/default-avatar.png"}`}
             alt={responsible.firstName}
             sx={{ width: 30, height: 30, marginRight: 2 }}
           />
@@ -479,7 +479,7 @@ const AddStudentPage = () => {
   {student.salesResponsibleName ? (
     <>
 <Avatar
-  src={`https://localhost:7048${student.salesResponsibleProfileImageUrl || "/uploads/default-avatar.png"}`}
+  src={`${process.env.REACT_APP_API_URL_IMAGE}${student.salesResponsibleProfileImageUrl || "/uploads/default-avatar.png"}`}
   alt={student.salesResponsibleName}
   sx={{ width: 30, height: 30, marginRight: 2 }} // تخصيص حجم الصورة
 />

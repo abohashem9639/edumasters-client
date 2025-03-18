@@ -46,7 +46,7 @@ const AddEmployeePage = () => {
     formData.append("LinkedUserId", linkedUserId);
 
     try {
-        const response = await axios.post("https://localhost:7048/api/Auth/create-employee", formData, {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/create-employee`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
           

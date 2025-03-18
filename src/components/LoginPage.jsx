@@ -13,7 +13,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://localhost:7048/api/Auth/login", formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/login`, formData);
       const { token, user } = response.data;
   
       if (!user || !user.id) {

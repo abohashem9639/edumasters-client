@@ -49,11 +49,11 @@
     // ✅ جلب بيانات الطالب إذا كان `studentId` موجودًا في الرابط
     useEffect(() => {
       if (studentIdFromURL) {
-        axios.get(`https://localhost:7048/api/Students/${studentIdFromURL}`)
+        axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/${studentIdFromURL}`)
           .then((response) => setStudent(response.data))
           .catch((error) => console.error("Error fetching student details:", error));
       } else {
-        axios.get("https://localhost:7048/api/Students")
+        axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
           .then((response) => setStudents(response.data))
           .catch((error) => console.error("Error fetching students:", error));
       }
@@ -65,20 +65,20 @@
       setApplication(prev => ({ ...prev, studentId: selectedStudentId }));
     
       // جلب بيانات الطالب المختار
-      axios.get(`https://localhost:7048/api/Students/${selectedStudentId}`)
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${selectedStudentId}`)
         .then(response => setStudent(response.data))
         .catch(error => console.error("Error fetching student details:", error));
     };
     // ✅ جلب قائمة الجامعات
     useEffect(() => {
-      axios.get("https://localhost:7048/api/Universities")
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`)
         .then((response) => setUniversities(response.data))
         .catch((error) => console.error("Error fetching universities:", error));
     }, []);
 
     // ✅ جلب الفروع الخاصة بالجامعة المختارة
     useEffect(() => {
-      let url = "https://localhost:7048/api/UniversityBranches";
+      let url = `${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches`;
       
       // إذا كانت هناك جامعة محددة، اجلب فقط الفروع الخاصة بها
       if (application.universityId) {
@@ -153,7 +153,7 @@
 
           console.log("Application Data Sent:", applicationData);
 
-          const response = await axios.post("https://localhost:7048/api/Applications", applicationData);
+          const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, applicationData);
 
           alert("Application submitted successfully!");
           navigate(`/students/${application.studentId}`);
@@ -214,7 +214,7 @@
                   <CardContent>
                     <Grid container spacing={2} alignItems="center">
                       <Grid item>
-                        <Avatar sx={{ width: 80, height: 80 }} src={`https://localhost:7048/${student.profileImage}`} />
+                        <Avatar sx={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL_LOCAL}${student.profileImage}`} />
                       </Grid>
                       <Grid item xs>
                         <Typography><b>Name:</b> {student.firstName} {student.lastName}</Typography>
@@ -333,7 +333,7 @@
         const university = universities.find((u) => u.id === branch.universityId);
         return (
           <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2, background: "#f8f9fa" }}>
-            <Avatar src={`https://localhost:7048${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" color="primary">#{branch.id}</Typography>
@@ -450,7 +450,7 @@
         const university = universities.find((u) => u.id === branch.universityId);
         return (
           <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2 }}>
-            <Avatar src={`https://localhost:7048${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={`${process.env.IMAGE_API}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" color="primary">#{branch.id}</Typography>
@@ -561,7 +561,7 @@
             const university = universities.find((u) => u.id === branch.universityId);
             return (
               <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2, background: "#f8f9fa" }}>
-                <Avatar src={`https://localhost:7048${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+                <Avatar src={`${process.env.REACT_APP_API_URL_LOCAL}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="h6" color="primary">#{branch.id}</Typography>
