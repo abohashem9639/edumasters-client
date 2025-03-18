@@ -236,6 +236,7 @@ useEffect(() => {
     <Avatar src={`https://localhost:7048/${selectedAnnouncement.universityLogo}`} sx={{ marginRight: 2 }} />
     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{selectedAnnouncement.universityName}</Typography>
   </Box>
+  
 </DialogTitle>
 
     <DialogContent>
