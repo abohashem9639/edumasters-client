@@ -333,7 +333,7 @@
         const university = universities.find((u) => u.id === branch.universityId);
         return (
           <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2, background: "#f8f9fa" }}>
-            <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={`${process.env.REACT_APP_API_URL_LOCAL}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" color="primary">#{branch.id}</Typography>
