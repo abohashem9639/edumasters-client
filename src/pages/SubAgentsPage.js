@@ -28,7 +28,7 @@ const SubAgentsPage = () => {
 
   const fetchSubAgents = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/SubAgents");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/SubAgents`);
       if (Array.isArray(response.data)) {
         setSubAgents(response.data); // إذا كانت البيانات مصفوفة، نقوم بتحديث الحالة
       } else {
@@ -43,7 +43,7 @@ const SubAgentsPage = () => {
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/agents");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/agents`);
       setAgents(response.data);
       console.log(response.data); // تحقق من البيانات هنا
     } catch (error) {
@@ -55,7 +55,7 @@ const SubAgentsPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this sub-agent?")) return;
     try {
-      await axios.delete(`https://localhost:7048/api/Auth/delete-sub-agent/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/delete-sub-agent/${id}`);
       setSubAgents((prev) => prev.filter((subAgent) => subAgent.id !== id));
     } catch (error) {
       console.error("Error deleting sub-agent:", error);
@@ -139,18 +139,18 @@ const SubAgentsPage = () => {
       try {
           if (selectedSubAgent) {
               // تعديل الـ sub-agent
-              await axios.put(`https://localhost:7048/api/SubAgents/update-sub-agent/${selectedSubAgent.id}`, formData, {
+              await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/SubAgents/update-sub-agent/${selectedSubAgent.id}`, formData, {
                   headers: { "Content-Type": "multipart/form-data" },
               });
               alert("Sub-Agent updated successfully!");
           } else {
               // إضافة sub-agent جديد
-              const response = await axios.post("https://localhost:7048/api/SubAgents/create-sub-agent", formData, {
+              const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/SubAgents/create-sub-agent`, formData, {
                   headers: { "Content-Type": "multipart/form-data" },
               });
               
               // إرسال رابط إعادة تعيين كلمة المرور إلى البريد الإلكتروني
-              await axios.post("https://localhost:7048/api/Auth/resend-reset-link", { email: newSubAgent.email });
+              await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/resend-reset-link`, { email: newSubAgent.email });
 
               alert("Sub-Agent added successfully! Reset link has been sent to the email.");
           }
@@ -165,7 +165,7 @@ const SubAgentsPage = () => {
 
   const resendResetLink = async (email) => {
     try {
-      await axios.post("https://localhost:7048/api/Auth/resend-reset-link", { email });
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/resend-reset-link`, { email });
       alert("Reset link has been sent to the sub-agent's email.");
     } catch (error) {
       console.error("Error sending reset link:", error);
@@ -202,7 +202,7 @@ const SubAgentsPage = () => {
               <TableRow key={subAgent.id}>
                 <TableCell>{subAgent.id}</TableCell>
                 <TableCell>
-                  <Avatar src={`https://localhost:7048${subAgent.profileImageUrl}`} alt={subAgent.fullName} sx={{ width: 50, height: 50 }} />
+                  <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${subAgent.profileImageUrl}`} alt={subAgent.fullName} sx={{ width: 50, height: 50 }} />
                 </TableCell>
                 <TableCell>{subAgent.firstName + " " + subAgent.lastName}</TableCell>
                 <TableCell>{subAgent.email}</TableCell>

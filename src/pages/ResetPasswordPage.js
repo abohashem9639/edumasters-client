@@ -23,7 +23,7 @@ const ResetPasswordPage = () => {
     console.log("📨 Sending request with:", { email, newPassword, confirmPassword, resetToken });
 
     try {
-      await axios.post("https://localhost:7048/api/Auth/reset-password", {
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/reset-password`, {
         email,
         newPassword,
         confirmPassword,

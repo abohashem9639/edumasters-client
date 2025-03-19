@@ -18,7 +18,7 @@ const AnnouncementsPage = () => {
 
   // Fetch universities on load
   useEffect(() => {
-    axios.get("https://localhost:7048/api/Universities")
+    axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`)
       .then(response => {
         setUniversities(response.data);
       })
@@ -27,7 +27,7 @@ const AnnouncementsPage = () => {
 
   // Fetch all announcements without university filter
   useEffect(() => {
-    axios.get("https://localhost:7048/api/Announcements/all")
+    axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Announcements/all`)
       .then(response => {
         setAnnouncements(response.data);
       })
@@ -75,10 +75,10 @@ const AnnouncementsPage = () => {
     };
 
     // إرسال البيانات عبر POST
-    axios.post("https://localhost:7048/api/Announcements", newAnnouncement)
+    axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Announcements`, newAnnouncement)
       .then(response => {
       setAnnouncements(prevAnnouncements => [...prevAnnouncements, response.data]);
-      axios.get("https://localhost:7048/api/Announcements/all")
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Announcements/all`)
         .then(response => {
           setAnnouncements(response.data);
         })
@@ -96,7 +96,7 @@ const AnnouncementsPage = () => {
 
 // Fetch users on load
 useEffect(() => {
-  axios.get("https://localhost:7048/api/Employees")
+  axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Employees`)
     .then(response => {
       setUsers(response.data);
     })
@@ -106,7 +106,7 @@ useEffect(() => {
 
   const handleAnnouncementClick = (id) => {
     // Fetch announcement by id
-    axios.get(`https://localhost:7048/api/Announcements/${id}`)
+    axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Announcements/${id}`)
       .then(response => {
         const selectedAnnouncement = response.data;
         setSelectedAnnouncement(selectedAnnouncement);
@@ -149,7 +149,7 @@ useEffect(() => {
       width: 200,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <Avatar src={`https://localhost:7048/${params.row.universityLogo}`} sx={{ marginRight: 1 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${params.row.universityLogo}`} sx={{ marginRight: 1 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{params.row.universityName}</Typography>
         </Box>
       ),
@@ -189,7 +189,7 @@ useEffect(() => {
       width: 200,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={`https://localhost:7048/${params.row.createdByUserImage}`} sx={{ marginRight: 1 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${params.row.createdByUserImage}`} sx={{ marginRight: 1 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{params.row.createdBy}</Typography>
         </Box>
       ),
@@ -233,7 +233,7 @@ useEffect(() => {
   <Dialog open={true} onClose={() => setSelectedAnnouncement(null)}>
 <DialogTitle sx={{ textAlign: 'center' }}>
   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 2 }}>
-    <Avatar src={`https://localhost:7048/${selectedAnnouncement.universityLogo}`} sx={{ marginRight: 2 }} />
+    <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${selectedAnnouncement.universityLogo}`} sx={{ marginRight: 2 }} />
     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{selectedAnnouncement.universityName}</Typography>
   </Box>
   
@@ -244,7 +244,7 @@ useEffect(() => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         {/* User Info */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={`https://localhost:7048/${selectedAnnouncement.createdByUserImage}`} sx={{ marginRight: 2 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${selectedAnnouncement.createdByUserImage}`} sx={{ marginRight: 2 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{selectedAnnouncement.createdBy}</Typography>
         </Box>
 
@@ -266,7 +266,7 @@ useEffect(() => {
       {/* Announcement text */}
       <div
         dangerouslySetInnerHTML={{
-          __html: selectedAnnouncement.announcement_text.replace(/src="\//g, 'src="https://localhost:7048/')
+          __html: selectedAnnouncement.announcement_text.replace(/src="\//g, 'src=`${process.env.REACT_APP_API_URL_IMAGE}/')
         }}
         style={{ whiteSpace: 'pre-line' }}
       />

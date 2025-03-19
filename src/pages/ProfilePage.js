@@ -22,7 +22,7 @@ const ProfilePage = () => {
     }
   
     try {
-      const response = await axios.get(`https://localhost:7048/api/user/profile`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/user/profile`, {
         params: { userId },  // إرسال userId كـ query parameter
       });
       
@@ -57,7 +57,7 @@ const ProfilePage = () => {
             {/* Profile Image with border and shadow */}
             <Avatar
               alt="Profile Image"
-              src={`https://localhost:7048${profileData.profileImageUrl}`}
+              src={`${process.env.REACT_APP_API_URL_IMAGE}${profileData.profileImageUrl}`}
               sx={{
                 width: 120,
                 height: 120,

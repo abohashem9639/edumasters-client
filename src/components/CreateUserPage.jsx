@@ -25,7 +25,7 @@ const CreateUserPage = () => {
 
   useEffect(() => {
     if (formData.userType === "SubAgent") {
-      axios.get("https://localhost:7048/api/Auth/agents", {
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/agents`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => {
@@ -92,7 +92,7 @@ const CreateUserPage = () => {
         submitData.append("profileImage", formData.profileImage);
       }
 
-      await axios.post("https://localhost:7048/api/Auth/create-user", submitData, {
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/create-user`, submitData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

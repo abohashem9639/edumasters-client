@@ -9,7 +9,7 @@ const StudentsListPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("https://localhost:7048/api/Students")
+    axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
       .then((response) => {
         console.log(response.data);  // تحقق من الرد هنا
         setStudents(response.data);  // تعيين البيانات للمصفوفة students

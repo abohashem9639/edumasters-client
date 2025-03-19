@@ -47,7 +47,7 @@ const UniversitiesPage = () => {
 
   const fetchUniversities = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/Universities");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`);
       setUniversities(response.data);
       fetchBranchesCount(response.data);
     } catch (error) {
@@ -59,7 +59,7 @@ const UniversitiesPage = () => {
     const counts = {};
     for (const uni of universities) {
       try {
-        const response = await axios.get(`https://localhost:7048/api/UniversityBranches?universityId=${uni.id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches?universityId=${uni.id}`);
         counts[uni.id] = response.data.length;
       } catch (error) {
         console.error("Error fetching branches:", error);
@@ -95,11 +95,11 @@ const UniversitiesPage = () => {
         }
 
         if (editMode && currentUniversity) {
-            await axios.put(`https://localhost:7048/api/Universities/${currentUniversity.id}`, formData, {
+            await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Universities/${currentUniversity.id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
         } else {
-            const response = await axios.post("https://localhost:7048/api/Universities", formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             setUniversities([...universities, response.data]);
@@ -216,7 +216,7 @@ const UniversitiesPage = () => {
               <TableCell>
                 {university.logoUrl && (
                   <img
-                    src={`https://localhost:7048${university.logoUrl}`}
+                    src={`${process.env.REACT_APP_API_URL_IMAGE}${university.logoUrl}`}
                     alt={university.name}
                     style={{ width: "50px", height: "50px", borderRadius: "50%" }}
                   />

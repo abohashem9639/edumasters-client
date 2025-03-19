@@ -74,7 +74,7 @@ const BranchesPage = () => {
     try {
         // ✅ جلب بيانات الفروع
         const response = await axios.get(
-            `https://localhost:7048/api/UniversityBranches?universityId=${universityId}`
+            `${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches?universityId=${universityId}`
         );
 
         if (response.data && Array.isArray(response.data)) {
@@ -87,7 +87,7 @@ const BranchesPage = () => {
 
         // ✅ جلب بيانات الجامعة (بما في ذلك الشعار)
         const universityResponse = await axios.get(
-            `https://localhost:7048/api/Universities/${universityId}`
+            `${process.env.REACT_APP_API_URL_LOCAL}/Universities/${universityId}`
         );
 
         setUniversityName(universityResponse.data?.name || "Unknown University");
@@ -202,7 +202,7 @@ const processBranches = (branchesData) => {
         status: newBranch.status,
       };
   
-      await axios.post("https://localhost:7048/api/UniversityBranches", branchData);
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches`, branchData);
       alert("Branch added successfully");
       fetchBranches();
       setOpenBranchDialog(false);
@@ -288,7 +288,7 @@ const downloadPDF = () => {
 
     // ✅ تحميل الشعار وتحويله إلى Base64 ثم إضافته
     if (universityLogoUrl) { 
-        const logoPath = `https://localhost:7048${universityLogoUrl}`;
+        const logoPath = `${process.env.REACT_APP_API_URL_IMAGE}${universityLogoUrl}`;
 
         toDataURL(logoPath, (dataUrl) => {
             if (dataUrl) {
@@ -345,12 +345,6 @@ const generatePDFContent = (doc, startY) => {
     // ✅ حفظ الملف بتنسيق مناسب
     doc.save(`${universityName.replace(/\s+/g, "_")}_Branches_Report.pdf`);
 };
-
-
-
-  
-  
-  
 
   return (
     <Box sx={{ padding: 4 }}>

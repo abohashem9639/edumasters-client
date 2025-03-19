@@ -25,7 +25,7 @@ const StudentDetailsPage = () => {
   // ✅ جلب بيانات الطالب عند تحميل الصفحة أو عند تغيير `id`
   useEffect(() => {
     if (id) {
-      axios.get(`https://localhost:7048/api/Students/${id}`)
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${id}`)
         .then((response) => {
           console.log("Fetched Student Data:", response.data);
           setStudent(response.data);
@@ -36,7 +36,7 @@ const StudentDetailsPage = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`https://localhost:7048/api/Students/${id}/files`)
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${id}/files`)
         .then((response) => {
           console.log("Fetched Student Files:", response.data);
           setFiles(response.data);
@@ -49,7 +49,7 @@ const StudentDetailsPage = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`https://localhost:7048/api/Students/${id}/files`)
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${id}/files`)
         .then((response) => {
           console.log("Fetched Student Files:", response.data);
           setFiles(response.data);
@@ -59,7 +59,7 @@ const StudentDetailsPage = () => {
   
           // ✅ تعيين الصورة إذا وُجدت
           if (profileFile) {
-            setProfileImage(`https://localhost:7048${profileFile.filePath}`);
+            setProfileImage(`${process.env.REACT_APP_API_URL_IMAGE}${profileFile.filePath}`);
           }
         })
         .catch((error) => console.error("Error fetching student files:", error));
@@ -69,7 +69,7 @@ const StudentDetailsPage = () => {
   
   // ✅ جلب قائمة الجامعات مرة واحدة فقط عند تحميل الصفحة
   useEffect(() => {
-    axios.get("https://localhost:7048/api/Universities")
+    axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`)
       .then((response) => {
         setUniversities(response.data);
       })
@@ -81,7 +81,7 @@ const StudentDetailsPage = () => {
     setApplication({ ...application, universityId });
 
     try {
-      const response = await axios.get(`https://localhost:7048/api/UniversityBranches?universityId=${universityId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches?universityId=${universityId}`);
       setBranches(response.data);
     } catch (error) {
       console.error("Error fetching branches:", error);
@@ -101,7 +101,7 @@ const StudentDetailsPage = () => {
     };
 
     try {
-      const existingApplications = await axios.get("https://localhost:7048/api/Applications?isAdmin=false");
+      const existingApplications = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Applications?isAdmin=false`);
 
       const duplicate = existingApplications.data.some(app =>
         app.studentId === student.id &&
@@ -114,7 +114,7 @@ const StudentDetailsPage = () => {
         return;
       }
 
-      const response = await axios.post("https://localhost:7048/api/Applications", applicationData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, applicationData);
       alert(response.data.message);
       setShowApplicationForm(false);
     } catch (error) {
@@ -162,7 +162,7 @@ const StudentDetailsPage = () => {
   {student.salesResponsibleName ? (
     <>
       <Avatar 
-        src={`https://localhost:7048${student.salesResponsibleProfileImageUrl || "/default-avatar.png"}`}
+        src={`${process.env.REACT_APP_API_URL_IMAGE}${student.salesResponsibleProfileImageUrl || "/default-avatar.png"}`}
         alt={student.salesResponsibleName}
         sx={{ width: 30, height: 30, marginRight: 2 }} // تخصيص حجم الصورة
       />
@@ -288,7 +288,7 @@ const StudentDetailsPage = () => {
                 variant="contained" 
                 color="primary" 
                 startIcon={<CloudDownload />}
-                onClick={() => window.open(`https://localhost:7048${file.filePath}`, "_blank")}
+                onClick={() => window.open(`${process.env.REACT_APP_API_URL_IMAGE}${file.filePath}`, "_blank")}
               >
                 Download
               </Button>

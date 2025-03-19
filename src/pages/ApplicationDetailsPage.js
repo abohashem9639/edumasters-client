@@ -76,7 +76,7 @@ const ApplicationDetailsPage = () => {
 
   useEffect(() => {
     axios
-      .get(`https://localhost:7048/api/Applications/${id}`)
+      .get(`${process.env.REACT_APP_API_URL_LOCAL}/Applications/${id}`)
       .then((response) => {
         setApplication(response.data);
         setSelectedStatus(response.data.status);
@@ -88,15 +88,15 @@ const ApplicationDetailsPage = () => {
 
   const fetchStudentDetails = async (studentId) => {
     try {
-      const response = await axios.get(`https://localhost:7048/api/Students/${studentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${studentId}`);
       setStudentInfo(response.data);
 
       // Fetch student profile image
-      const filesResponse = await axios.get(`https://localhost:7048/api/Students/${studentId}/files`);
+      const filesResponse = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${studentId}/files`);
       const profileFile = filesResponse.data.find((file) => file.fileType.toLowerCase() === "profileimage");
 
       if (profileFile) {
-        setProfileImage(`https://localhost:7048${profileFile.filePath}`);
+        setProfileImage(`${process.env.REACT_APP_API_URL_IMAGE}${profileFile.filePath}`);
       }
     } catch (error) {
       console.error("Error fetching student details:", error);
@@ -105,7 +105,7 @@ const ApplicationDetailsPage = () => {
 
   const fetchFilesForApplication = async () => {
     try {
-      const response = await axios.get(`https://localhost:7048/api/ApplicationFiles/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/ApplicationFiles/${id}`);
       setFiles(response.data);
     } catch (error) {
       console.error("Error fetching files:", error);
@@ -114,7 +114,7 @@ const ApplicationDetailsPage = () => {
 
   const handleStatusChange = async (newStatus) => {
     try {
-      await axios.put(`https://localhost:7048/api/Applications/${id}`, { status: newStatus });
+      await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Applications/${id}`, { status: newStatus });
       setSelectedStatus(newStatus);
       setApplication({ ...application, status: newStatus });
       setAnchorEl(null);
@@ -151,7 +151,7 @@ const ApplicationDetailsPage = () => {
     formData.append("CreatedByUserId", userId);
   
     try {
-      await axios.post("https://localhost:7048/api/ApplicationFiles/upload", formData, {
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/ApplicationFiles/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setOpenModal(false);
@@ -342,7 +342,7 @@ const ApplicationDetailsPage = () => {
                         <TableCell>
                           <Button
                             variant="contained"
-                            href={`https://localhost:7048/${file.filePath}`}
+                            href={`${process.env.REACT_APP_API_URL_IMAGE}/${file.filePath}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

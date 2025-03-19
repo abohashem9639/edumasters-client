@@ -27,7 +27,7 @@ const EmployeesPage = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://localhost:7048/api/Employees");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Employees`);
       setEmployees(response.data);
       console.log(response.data);
     } catch (error) {
@@ -37,7 +37,7 @@ const EmployeesPage = () => {
 
   const handleToggleStatus = async (id, currentStatus) => {
     try {
-      await axios.put(`https://localhost:7048/api/Employees/${id}/toggle-status`);
+      await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Employees/${id}/toggle-status`);
       setEmployees((prev) =>
         prev.map((emp) => (emp.id === id ? { ...emp, status: !currentStatus } : emp))
       );
@@ -49,7 +49,7 @@ const EmployeesPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
     try {
-      await axios.delete(`https://localhost:7048/api/Employees/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL_LOCAL}/Employees/${id}`);
       setEmployees((prev) => prev.filter((emp) => emp.id !== id));
     } catch (error) {
       console.error("Error deleting employee:", error);
@@ -128,13 +128,13 @@ const EmployeesPage = () => {
     try {
       if (selectedEmployee) {
         // تحديث الموظف
-        await axios.put(`https://localhost:7048/api/Employees/${selectedEmployee.id}`, formData, {
+        await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Employees/${selectedEmployee.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Employee updated successfully!");
       } else {
         // إضافة موظف جديد
-        await axios.post("https://localhost:7048/api/Employees/create-employee", formData, {
+        await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Employees/create-employee`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Employee added successfully!");
@@ -191,7 +191,7 @@ const EmployeesPage = () => {
                   <TableCell>{employee.id}</TableCell>
                   <TableCell>
                     <Avatar
-                      src={`https://localhost:7048${employee.profileImageUrl}`}
+                      src={`${process.env.REACT_APP_API_URL_IMAGE}${employee.profileImageUrl}`}
                       alt={employee.fullName}
                       sx={{ width: 50, height: 50 }}
                     />

@@ -21,7 +21,7 @@ const TeamsPage = () => {
 
   const fetchTeams = async () => {
     try {
-      const response = await axios.get('https://localhost:7048/api/Teams');
+      const response = await axios.get('${process.env.REACT_APP_API_URL_LOCAL}/Teams');
       setTeams(response.data);
     } catch (error) {
       console.error("Error fetching teams:", error);
@@ -30,7 +30,7 @@ const TeamsPage = () => {
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get('https://localhost:7048/api/Teams/available');
+      const response = await axios.get('${process.env.REACT_APP_API_URL_LOCAL}/Teams/available');
       setAgents(response.data);
     } catch (error) {
       console.error("Error fetching agents:", error);
@@ -58,7 +58,7 @@ const TeamsPage = () => {
       formData.append("name", newTeam.name);
       if (logoFile) formData.append("logo", logoFile);
 
-      await axios.post('https://localhost:7048/api/Teams', formData);
+      await axios.post('${process.env.REACT_APP_API_URL_LOCAL}/Teams', formData);
       fetchTeams();
       setOpenSnackbar(true);
       handleCloseAddTeamModal();
@@ -76,7 +76,7 @@ const TeamsPage = () => {
 
   const handleRemoveMember = async (teamId, userId) => {
     try {
-      await axios.delete(`https://localhost:7048/api/Teams/${teamId}/remove-member/${userId}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL_LOCAL}/Teams/${teamId}/remove-member/${userId}`);
       setSelectedTeam((prevState) => ({
         ...prevState,
         teamMembers: prevState.teamMembers.filter((member) => member.userId !== userId),
@@ -89,7 +89,7 @@ const TeamsPage = () => {
 
   const handleAddMembersToTeam = async () => {
     try {
-      await axios.post(`https://localhost:7048/api/Teams/${selectedTeam.id}/add-members`, { userIds: selectedAgents });
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Teams/${selectedTeam.id}/add-members`, { userIds: selectedAgents });
       fetchTeams();
       setSelectedAgents([]);
       setOpenSnackbar(true);
@@ -106,7 +106,7 @@ const TeamsPage = () => {
       formData.append("name", selectedTeam.name);
       if (logoFile) formData.append("logo", logoFile);
   
-      await axios.put(`https://localhost:7048/api/Teams/${selectedTeam.id}`, formData);
+      await axios.put(`${process.env.REACT_APP_API_URL_LOCAL}/Teams/${selectedTeam.id}`, formData);
       fetchTeams();
       setSelectedAgents([]);
       setOpenSnackbar(true);
@@ -195,7 +195,7 @@ const TeamsPage = () => {
           {selectedTeam?.logo && (
             <Box sx={{ display: "flex", justifyContent: "center", position: "relative", mb: 2 }}>
               <img
-                src={`https://localhost:7048${selectedTeam.logo}`}
+                src={`${process.env.REACT_APP_API_URL_IMAGE}${selectedTeam.logo}`}
                 alt="Team Logo"
                 style={{
                   borderRadius: "50%", 

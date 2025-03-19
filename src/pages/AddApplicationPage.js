@@ -46,18 +46,22 @@
     
   const userId = localStorage.getItem("userId") || sessionStorage.getItem("userId") || "0"; 
 
-    // ✅ جلب بيانات الطالب إذا كان `studentId` موجودًا في الرابط
-    useEffect(() => {
-      if (studentIdFromURL) {
-        axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/${studentIdFromURL}`)
-          .then((response) => setStudent(response.data))
-          .catch((error) => console.error("Error fetching student details:", error));
-      } else {
-        axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
-          .then((response) => setStudents(response.data))
-          .catch((error) => console.error("Error fetching students:", error));
-      }
-    }, [studentIdFromURL]);
+  useEffect(() => {
+    if (studentIdFromURL) {
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/${studentIdFromURL}`)
+        .then((response) => {
+          setStudent(response.data);
+        })
+        .catch((error) => console.error("Error fetching student details:", error));
+    } else {
+      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
+        .then((response) => {
+          setStudents(response.data);
+        })
+        .catch((error) => console.error("Error fetching students:", error));
+    }
+  }, [studentIdFromURL]);
+  
 
     // ✅ عند اختيار الطالب من القائمة المنسدلة، يتم تحديث بياناته مباشرة
     const handleStudentChange = (event) => {
@@ -66,7 +70,9 @@
     
       // جلب بيانات الطالب المختار
       axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${selectedStudentId}`)
-        .then(response => setStudent(response.data))
+        .then(response =>{
+          console.log("SSADSDA: ", response.data);
+          setStudent(response.data)})
         .catch(error => console.error("Error fetching student details:", error));
     };
     // ✅ جلب قائمة الجامعات
@@ -214,7 +220,7 @@
                   <CardContent>
                     <Grid container spacing={2} alignItems="center">
                       <Grid item>
-                        <Avatar sx={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL_IMAGE}${student.profileImage}`} />
+                        <Avatar sx={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL_IMAGE}${student.profileImageUrl}`} />
                       </Grid>
                       <Grid item xs>
                         <Typography><b>Name:</b> {student.firstName} {student.lastName}</Typography>
@@ -333,7 +339,7 @@
         const university = universities.find((u) => u.id === branch.universityId);
         return (
           <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2, background: "#f8f9fa" }}>
-            <Avatar src={`${process.env.REACT_APP_API_URL_LOCAL}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" color="primary">#{branch.id}</Typography>
@@ -450,7 +456,7 @@
         const university = universities.find((u) => u.id === branch.universityId);
         return (
           <Card key={branch.id} sx={{ mb: 2, display: "flex", alignItems: "center", p: 2 }}>
-            <Avatar src={`${process.env.IMAGE_API}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`} sx={{ width: 50, height: 50, mr: 2 }} />
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" color="primary">#{branch.id}</Typography>
