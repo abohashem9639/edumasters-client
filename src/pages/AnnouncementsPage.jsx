@@ -149,7 +149,7 @@ useEffect(() => {
       width: 200,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${params.row.universityLogo}`} sx={{ marginRight: 1 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${params.row.universityLogo}`} sx={{ marginRight: 1 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{params.row.universityName}</Typography>
         </Box>
       ),
@@ -189,7 +189,7 @@ useEffect(() => {
       width: 200,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${params.row.createdByUserImage}`} sx={{ marginRight: 1 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${params.row.createdByUserImage}`} sx={{ marginRight: 1 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{params.row.createdBy}</Typography>
         </Box>
       ),
@@ -233,7 +233,7 @@ useEffect(() => {
   <Dialog open={true} onClose={() => setSelectedAnnouncement(null)}>
 <DialogTitle sx={{ textAlign: 'center' }}>
   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 2 }}>
-    <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${selectedAnnouncement.universityLogo}`} sx={{ marginRight: 2 }} />
+    <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${selectedAnnouncement.universityLogo}`} sx={{ marginRight: 2 }} />
     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{selectedAnnouncement.universityName}</Typography>
   </Box>
   
@@ -244,7 +244,7 @@ useEffect(() => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
         {/* User Info */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}/${selectedAnnouncement.createdByUserImage}`} sx={{ marginRight: 2 }} />
+          <Avatar src={`${process.env.REACT_APP_API_URL_IMAGE}${selectedAnnouncement.createdByUserImage}`} sx={{ marginRight: 2 }} />
           <Typography sx={{ fontWeight: 'bold' }}>{selectedAnnouncement.createdBy}</Typography>
         </Box>
 

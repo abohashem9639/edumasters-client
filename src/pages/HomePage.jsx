@@ -144,6 +144,20 @@ const HomePage = () => {
                 Announcement
               </Button>
             </Grid2>
+
+
+                                    {/* Button for Profile Page */}
+                                    <Grid2 item xs={12} sm={6} md={4}>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={buttonStyle}
+                onClick={() => handleNavigation('/programs')}  // Navigation to Profile Page
+                startIcon={<AccountBox />}  // Adding icon
+              >
+                Announcement
+              </Button>
+            </Grid2>
           </Grid2>
         </CardContent>
       </Card>
