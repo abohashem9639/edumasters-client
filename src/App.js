@@ -20,6 +20,7 @@ import SubAgentsPage from './pages/SubAgentsPage';
 import TeamsPage from './pages/TeamsPage';
 import ProfilePage from "./pages/ProfilePage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
+import AllBranchesPage from "./pages/AllBranchesPage";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/teams" element={<ProtectedRoute><TeamsPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/announcements" element={<ProtectedRoute><AnnouncementsPage /></ProtectedRoute>} />
+          <Route path="/AllBranchesPage" element={<ProtectedRoute><AllBranchesPage /></ProtectedRoute>} />
 
 
           {/* إضافة المسارات لصفحات التطبيقات */}

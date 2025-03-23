@@ -152,10 +152,10 @@ const HomePage = () => {
                 variant="contained"
                 fullWidth
                 sx={buttonStyle}
-                onClick={() => handleNavigation('/programs')}  // Navigation to Profile Page
+                onClick={() => handleNavigation('/AllBranchesPage')}  // Navigation to Profile Page
                 startIcon={<AccountBox />}  // Adding icon
               >
-                Announcement
+                AllBranchesPage
               </Button>
             </Grid2>
           </Grid2>
