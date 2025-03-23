@@ -10,7 +10,7 @@ const ApplicationsPage = () => {
   useEffect(() => {
     const userType = localStorage.getItem("userType");  // أو يمكنك استخدام sessionStorage أو أي طريقة أخرى لتخزين نوع المستخدم
     axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, { 
-      params: { isAdmin: userType === "Admin" }  // إرسال المعامل isAdmin بناءً على نوع المستخدم
+      params: { isAdmin: userType !== "A" }  // إرسال المعامل isAdmin بناءً على نوع المستخدم
     })
       .then(response => {
         setApplications(response.data);
