@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Box, Button, Grid, Typography, Card, CardContent, Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Box, Button, Grid, Typography, Card, CardContent, Drawer, List, ListItem, ListItemText, Divider, Avatar } from '@mui/material';
 import { Business, People, Assignment, Work, AccountBox, PersonAdd } from '@mui/icons-material'; // Import icons
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   
-  const [openSidebar, setOpenSidebar] = useState(false); // State to control the sidebar
+  const [openSidebar, setOpenSidebar] = useState(true); // Sidebar open by default
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -34,7 +34,7 @@ const HomePage = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       {/* Sidebar */}
       <Drawer
         sx={{
@@ -80,17 +80,17 @@ const HomePage = () => {
       </Drawer>
 
       {/* Main Content Area */}
-      <Box sx={{ flex: 1, padding: 4, marginLeft: 240 }}>
+      <Box sx={{ flex: 1, padding: 4, marginLeft: openSidebar ? 240 : 0, transition: 'margin-left 0.3s' }}>
         <Typography variant="h4" sx={{ marginBottom: 4 }}>
           Welcome to EduMasters CRM
         </Typography>
 
-        <Card sx={{ padding: 3, boxShadow: 3 }}>
+        <Card sx={{ padding: 3, boxShadow: 3, marginBottom: 3 }}>
           <CardContent>
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
               Manage Your Data Efficiently
             </Typography>
-            
+
             {/* Button grid for navigation */}
             <Grid container spacing={3}>
               {sidebarList.map((item, index) => (
@@ -107,6 +107,39 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
+          </CardContent>
+        </Card>
+
+        {/* New Section: About the system */}
+        <Card sx={{ padding: 3, boxShadow: 3 }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ marginBottom: 3 }}>About EduMasters CRM</Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              EduMasters CRM is an all-in-one platform designed to streamline the management of universities, students, applications, agents, and more. It provides a user-friendly interface for administrative tasks, offering tools for managing student data, applications, and employee records.
+            </Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              Whether you're looking to view or manage universities, students, or applications, EduMasters CRM allows you to perform these tasks with ease. The platform also supports agents and sub-agents for efficient recruitment management.
+            </Typography>
+
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>How it Works:</Typography>
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+              1. **Universities**: Manage all the details related to universities, including their branches and departments.
+            </Typography>
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+              2. **Students**: Track student data, admissions, and academic progress.
+            </Typography>
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+              3. **Applications**: Manage student applications to universities and track their status.
+            </Typography>
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+              4. **Agents and Sub-Agents**: Agents handle recruitment processes, while sub-agents assist in various administrative tasks.
+            </Typography>
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+              5. **Profile Management**: Edit and manage user profiles for seamless system access.
+            </Typography>
+            <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+              <Avatar src="EduMasters.png" sx={{ width: 120, height: 120, margin: 'auto' }} />
+            </Box>
           </CardContent>
         </Card>
       </Box>
