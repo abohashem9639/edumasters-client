@@ -21,22 +21,22 @@ const TeamsPage = () => {
 
   const fetchTeams = async () => {
     try {
-      const response = await axios.get('${process.env.REACT_APP_API_URL_LOCAL}/Teams');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Teams`);
       setTeams(response.data);
     } catch (error) {
       console.error("Error fetching teams:", error);
     }
   };
-
+  
   const fetchAgents = async () => {
     try {
-      const response = await axios.get('${process.env.REACT_APP_API_URL_LOCAL}/Teams/available');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Teams/available`);
       setAgents(response.data);
     } catch (error) {
       console.error("Error fetching agents:", error);
     }
   };
-
+  
   const handleOpenAddTeamModal = () => setOpenAddTeamModal(true);
   const handleCloseAddTeamModal = () => setOpenAddTeamModal(false);
 
@@ -58,7 +58,7 @@ const TeamsPage = () => {
       formData.append("name", newTeam.name);
       if (logoFile) formData.append("logo", logoFile);
 
-      await axios.post('${process.env.REACT_APP_API_URL_LOCAL}/Teams', formData);
+      await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Teams`, formData);
       fetchTeams();
       setOpenSnackbar(true);
       handleCloseAddTeamModal();

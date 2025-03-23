@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Modal, TextField, MenuItem, Select, InputLabel, FormControl, FormHelperText } from "@mui/material";
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Modal, TextField, MenuItem, Select, InputLabel, FormControl, FormHelperText, Grid } from "@mui/material";
 import { Delete, Edit, Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -51,7 +51,6 @@ const SubAgentsPage = () => {
     }
   };
   
-  
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this sub-agent?")) return;
     try {
@@ -94,9 +93,6 @@ const SubAgentsPage = () => {
     }
     setOpen(true);
   };
-  
-  
-
 
   const handleCloseModal = () => {
     setOpen(false);
@@ -149,8 +145,6 @@ const SubAgentsPage = () => {
                   headers: { "Content-Type": "multipart/form-data" },
               });
               
-              // إرسال رابط إعادة تعيين كلمة المرور إلى البريد الإلكتروني
-              await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Auth/resend-reset-link`, { email: newSubAgent.email });
 
               alert("Sub-Agent added successfully! Reset link has been sent to the email.");
           }
@@ -161,7 +155,6 @@ const SubAgentsPage = () => {
           alert("Failed to add or update sub-agent.");
       }
   };
-  
 
   const resendResetLink = async (email) => {
     try {
@@ -240,24 +233,31 @@ const SubAgentsPage = () => {
             <TextField fullWidth label="Phone Number" name="phoneNumber" value={newSubAgent.phoneNumber} onChange={handleInputChange} margin="normal" required error={!!errors.phoneNumber} helperText={errors.phoneNumber} />
             
             <FormControl fullWidth margin="normal" required error={!!errors.linkedUserId}>
-  <InputLabel>Linked Agent</InputLabel>
-  <Select
-    name="linkedUserId"
-    value={newSubAgent.linkedUserId}  // هنا سيتم تحديد الوكيل المرتبط في القائمة المنسدلة
-    onChange={handleInputChange}
-  >
-    {agents.map((agent) => (
-      <MenuItem key={agent.id} value={agent.id}>
-        {agent.fullName}
-      </MenuItem>
-    ))}
-  </Select>
-  <FormHelperText>{errors.linkedUserId}</FormHelperText>
-</FormControl>
-
-
-
-
+              <InputLabel>Linked Agent</InputLabel>
+              <Select
+                name="linkedUserId"
+                value={newSubAgent.linkedUserId}  // هنا سيتم تحديد الوكيل المرتبط في القائمة المنسدلة
+                onChange={handleInputChange}
+              >
+                {agents.map((agent) => (
+                  <MenuItem key={agent.id} value={agent.id}>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <Avatar
+                          src={`${process.env.REACT_APP_API_URL_IMAGE}${agent.profileImageUrl}`}
+                          alt={agent.fullName}
+                          sx={{ width: 24, height: 24, marginRight: 2 }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Typography>{agent.fullName}</Typography>
+                      </Grid>
+                    </Grid>
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{errors.linkedUserId}</FormHelperText>
+            </FormControl>
 
             <TextField fullWidth type="file" onChange={handleFileChange} margin="normal" required error={!!errors.profileImage} helperText={errors.profileImage} />
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>

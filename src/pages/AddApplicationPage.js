@@ -1,115 +1,124 @@
-  import React, { useState, useEffect } from "react";
-  import axios from "axios";
-  import { useNavigate, useSearchParams } from "react-router-dom";
-  import {
-    Box,
-    Typography,
-    Button,
-    Grid,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Tabs,
-    Tab,
-    Paper,
-    Avatar,
-    Card,
-    CardContent,
-    Divider,
-  } from "@mui/material";
-  import { Person, School, CheckCircle } from "@mui/icons-material";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tabs,
+  Tab,
+  Paper,
+  Avatar,
+  Card,
+  CardContent,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
+import { Person, School, CheckCircle } from "@mui/icons-material";
 
-  const AddApplicationPage = () => {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const studentIdFromURL = searchParams.get("studentId");
+const AddApplicationPage = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const studentIdFromURL = searchParams.get("studentId");
 
-    const [step, setStep] = useState(0);
-    const [students, setStudents] = useState([]);
-    const [student, setStudent] = useState(null);
-    const [universities, setUniversities] = useState([]);
-    const [branches, setBranches] = useState([]);
-    const [application, setApplication] = useState({
-      studentId: studentIdFromURL || "",
-      degree: "",
-      universityId: "",
-      language: "",
-      branchId: "",
-    });
-    const [selectedBranches, setSelectedBranches] = useState([]); // ✅ تخزين الفروع المختارة
-    const [filters, setFilters] = useState({
-      country: "",
-      city: "",
-      status: ""
-    });
-    
-  const userId = localStorage.getItem("userId") || sessionStorage.getItem("userId") || "0"; 
+  const [step, setStep] = useState(0);
+  const [students, setStudents] = useState([]);
+  const [student, setStudent] = useState(null);
+  const [universities, setUniversities] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [application, setApplication] = useState({
+    studentId: studentIdFromURL || "",
+    degree: "",
+    universityId: "",
+    language: "",
+    branchId: "",
+  });
+  const [selectedBranches, setSelectedBranches] = useState([]); // تخزين الفروع المختارة
+  const [filters, setFilters] = useState({
+    country: "",
+    city: "",
+    status: "",
+  });
+  const [loading, setLoading] = useState(false); // حالة التحميل
+
+  const userId = localStorage.getItem("userId") || sessionStorage.getItem("userId") || "0";
 
   useEffect(() => {
     if (studentIdFromURL) {
-      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/${studentIdFromURL}`)
+      setLoading(true); // تفعيل حالة التحميل
+      axios
+        .get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${studentIdFromURL}`)
         .then((response) => {
-          setStudent(response.data);
+          if (response.data) {
+            setStudent(response.data);
+          } else {
+            setStudent(null); // إذا لم يتم العثور على الطالب
+          }
         })
-        .catch((error) => console.error("Error fetching student details:", error));
+        .catch((error) => console.error("Error fetching student details:", error))
+        .finally(() => setLoading(false)); // إيقاف حالة التحميل
     } else {
-      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
+      axios
+        .get(`${process.env.REACT_APP_API_URL_LOCAL}/Students`)
         .then((response) => {
           setStudents(response.data);
         })
         .catch((error) => console.error("Error fetching students:", error));
     }
   }, [studentIdFromURL]);
-  
 
-    // ✅ عند اختيار الطالب من القائمة المنسدلة، يتم تحديث بياناته مباشرة
-    const handleStudentChange = (event) => {
-      const selectedStudentId = event.target.value;
-      setApplication(prev => ({ ...prev, studentId: selectedStudentId }));
-    
-      // جلب بيانات الطالب المختار
-      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${selectedStudentId}`)
-        .then(response =>{
-          console.log("SSADSDA: ", response.data);
-          setStudent(response.data)})
-        .catch(error => console.error("Error fetching student details:", error));
-    };
-    // ✅ جلب قائمة الجامعات
-    useEffect(() => {
-      axios.get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`)
-        .then((response) => setUniversities(response.data))
-        .catch((error) => console.error("Error fetching universities:", error));
-    }, []);
+  // عند اختيار الطالب من القائمة المنسدلة، يتم تحديث بياناته مباشرة
+  const handleStudentChange = (event) => {
+    const selectedStudentId = event.target.value;
+    setApplication((prev) => ({ ...prev, studentId: selectedStudentId }));
 
-    // ✅ جلب الفروع الخاصة بالجامعة المختارة
-    useEffect(() => {
-      let url = `${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches`;
-      
-      // إذا كانت هناك جامعة محددة، اجلب فقط الفروع الخاصة بها
-      if (application.universityId) {
-        url += `?universityId=${application.universityId}`;
-      }
-    
-      axios.get(url)
-        .then((response) => {
-          const processedBranches = response.data.map(branch => {
-            const university = universities.find(u => u.id === branch.universityId) || {};
-            return {
-              ...branch,
-              country: university.country || "Unknown",
-              city: university.city || "Unknown",
-              levels: branch.levels ? branch.levels.split(",").map(l => l.trim()) : ["Not Available"],
-              languages: branch.languages ? branch.languages.split(",").map(l => l.trim()) : ["Not Available"]
-            };
-          });
-          setBranches(processedBranches);
-          console.log("Fetched Branches:", processedBranches);
-        })
-        .catch((error) => console.error("Error fetching branches:", error));
-    }, [application.universityId, universities]);
-    
-  
+    // جلب بيانات الطالب المختار
+    axios
+      .get(`${process.env.REACT_APP_API_URL_LOCAL}/Students/${selectedStudentId}`)
+      .then((response) => {
+        setStudent(response.data);
+      })
+      .catch((error) => console.error("Error fetching student details:", error));
+  };
+
+  // جلب قائمة الجامعات
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL_LOCAL}/Universities`)
+      .then((response) => setUniversities(response.data))
+      .catch((error) => console.error("Error fetching universities:", error));
+  }, []);
+
+  // جلب الفروع الخاصة بالجامعة المختارة
+  useEffect(() => {
+    let url = `${process.env.REACT_APP_API_URL_LOCAL}/UniversityBranches`;
+
+    if (application.universityId) {
+      url += `?universityId=${application.universityId}`;
+    }
+
+    axios
+      .get(url)
+      .then((response) => {
+        const processedBranches = response.data.map((branch) => {
+          const university = universities.find((u) => u.id === branch.universityId) || {};
+          return {
+            ...branch,
+            country: university.country || "Unknown",
+            city: university.city || "Unknown",
+            levels: branch.levels ? branch.levels.split(",").map((l) => l.trim()) : ["Not Available"],
+            languages: branch.languages ? branch.languages.split(",").map((l) => l.trim()) : ["Not Available"],
+          };
+        });
+        setBranches(processedBranches);
+      })
+      .catch((error) => console.error("Error fetching branches:", error));
+  }, [application.universityId, universities]);
 
   const handleNext = () => {
     if (step === 0 && !application.studentId) {
@@ -122,133 +131,153 @@
     }
     setStep(step + 1);
   };
-    
-    const handleBack = () => setStep(step - 1);
 
-    const handleSubmitApplication = async () => {
-      try {
-          console.log("Application Data Before Submission:", application);
+  const handleBack = () => setStep(step - 1);
 
-          if (!application.studentId || selectedBranches.length === 0) {
-              alert("Please select a student and at least one branch.");
-              return;
-          }
+  const handleSubmitApplication = async () => {
+    try {
+      console.log("Application Data Before Submission:", application);
 
-          // التحقق من أن جميع الحقول المطلوبة غير فارغة
-          selectedBranches.forEach(branch => {
-              if (!branch.levels || branch.levels.length === 0) {
-                  alert(`Degree is required for branch ${branch.branchName}`);
-                  return;
-              }
-              if (!branch.languages || branch.languages.length === 0) {
-                  alert(`Language is required for branch ${branch.branchName}`);
-                  return;
-              }
-          });
-
-          // ✅ تجهيز البيانات المطلوبة للإرسال بدون `term`
-          const applicationData = {
-              studentId: application.studentId,
-              degree: selectedBranches[0].levels[0], // تحديد الدرجة من أول فرع
-              universityId: selectedBranches[0].universityId,
-              language: selectedBranches[0].languages[0], // تحديد اللغة من أول فرع
-              branchId: selectedBranches[0].id,
-              createdByUserId: userId,
-              status: "Ready to Apply" // تعيين الحالة افتراضيًا
-          };
-
-          console.log("Application Data Sent:", applicationData);
-
-          const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, applicationData);
-
-          alert("Application submitted successfully!");
-          navigate(`/students/${application.studentId}`);
-      } catch (error) {
-          console.error("Error submitting application:", error);
-
-          // طباعة تفاصيل الخطأ لتحديد السبب
-          if (error.response) {
-              console.log("Error Response Data:", error.response.data);
-              alert(`Failed to submit application: ${JSON.stringify(error.response.data.errors)}`);
-          } else {
-              alert("Failed to submit application. Please check the console for more details.");
-          }
+      if (!application.studentId || selectedBranches.length === 0) {
+        alert("Please select a student and at least one branch.");
+        return;
       }
+
+      selectedBranches.forEach((branch) => {
+        if (!branch.levels || branch.levels.length === 0) {
+          alert(`Degree is required for branch ${branch.branchName}`);
+          return;
+        }
+        if (!branch.languages || branch.languages.length === 0) {
+          alert(`Language is required for branch ${branch.branchName}`);
+          return;
+        }
+      });
+
+      const applicationData = {
+        studentId: application.studentId,
+        degree: selectedBranches[0].levels[0],
+        universityId: selectedBranches[0].universityId,
+        language: selectedBranches[0].languages[0],
+        branchId: selectedBranches[0].id,
+        createdByUserId: userId,
+        status: "Ready to Apply",
+      };
+
+      console.log("Application Data Sent:", applicationData);
+
+      const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, applicationData);
+
+      alert("Application submitted successfully!");
+      navigate(`/students/${application.studentId}`);
+    } catch (error) {
+      console.error("Error submitting application:", error);
+
+      if (error.response) {
+        console.log("Error Response Data:", error.response.data);
+        alert(`Failed to submit application: ${JSON.stringify(error.response.data.errors)}`);
+      } else {
+        alert("Failed to submit application. Please check the console for more details.");
+      }
+    }
   };
 
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
-};
-    const handleAddBranch = (branch) => {
-      if (selectedBranches.some((b) => b.universityId === branch.universityId)) {
-        alert("You cannot select more than one branch from the same university.");
-        return;
-      }
-    
-      setSelectedBranches([...selectedBranches, {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddBranch = (branch) => {
+    if (selectedBranches.some((b) => b.universityId === branch.universityId)) {
+      alert("You cannot select more than one branch from the same university.");
+      return;
+    }
+
+    setSelectedBranches([
+      ...selectedBranches,
+      {
         ...branch,
         degree: branch.levels ? branch.levels[0] : "Not Available",
         language: branch.languages ? branch.languages[0] : "Not Available",
-      }]);
-    };
+      },
+    ]);
+  };
+
+  const handleRemoveBranch = (branchId) => {
+    setSelectedBranches(selectedBranches.filter((branch) => branch.id !== branchId));
+  };
+
+  return (
+    <Box sx={{ maxWidth: "1200px", width: "100%", margin: "auto", p: 4 }}>
+      <Typography variant="h4" align="center" sx={{ mb: 3 }}>
+        Add Application
+      </Typography>
+
+      <Paper sx={{ p: 3 }}>
+        <Tabs value={step} centered>
+          <Tab label="Student" icon={<Person />} />
+          <Tab label="Program" icon={<School />} />
+          <Tab label="Review" icon={<CheckCircle />} />
+        </Tabs>
+
+        {step === 0 && (
+  <Box sx={{ mt: 3 }}>
+    <Typography variant="h6">Select Student</Typography>
+    {loading ? (
+      <CircularProgress sx={{ display: "block", margin: "auto" }} /> // عرض مؤشر التحميل
+    ) : studentIdFromURL && student === null ? (
+      // إذا كان studentId موجودًا في الرابط لكن الطالب غير موجود
+      <Typography variant="h6" color="error" align="center">
+      </Typography>
+    ) : (
+      // لا تظهر بيانات الطالب إلا بعد اختيار الطالب
+      student && (
+        <Card sx={{ mt: 3, p: 2 }}>
+          <CardContent>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item>
+                <Avatar sx={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL_IMAGE}${student?.profileImageUrl}`} />
+              </Grid>
+              <Grid item xs>
+                <Typography><b>Name:</b> {student?.firstName} {student?.lastName}</Typography>
+                <Typography><b>Nationality:</b> {student?.nationality}</Typography>
+                <Typography><b>Passport ID:</b> {student?.passportNumber}</Typography>
+                <Typography><b>Email:</b> {student?.email}</Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      )
+    )}
     
-    const handleRemoveBranch = (branchId) => {
-      setSelectedBranches(selectedBranches.filter(branch => branch.id !== branchId));
-    };
+    {/* عرض القائمة المنسدلة فقط إذا لم يكن هناك studentId في الرابط */}
+    {!studentIdFromURL && (
+      <FormControl fullWidth sx={{ mt: 2 }}>
+        <InputLabel>Student</InputLabel>
+        <Select value={application.studentId} onChange={handleStudentChange}>
+          {students.map((s) => (
+            <MenuItem key={s.id} value={s.id}>
+              {s.firstName} {s.lastName} - {s.nationality}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    )}
     
+    <Box sx={{ mt: 3, display: "flex", justifyContent: "space-between" }}>
+      <Button onClick={() => navigate("/students")}>Cancel</Button>
+      <Button
+        variant="contained"
+        onClick={handleNext}
+        disabled={loading || !application.studentId || student === null}
+      >
+        Next
+      </Button>
+    </Box>
+  </Box>
+)}
 
-    return (
-      <Box sx={{ maxWidth: "1200px", width: "100%", margin: "auto", p: 4 }}>
 
-        <Typography variant="h4" align="center" sx={{ mb: 3 }}>
-          Add Application
-        </Typography>
-
-        <Paper sx={{ p: 3 }}>
-          <Tabs value={step} centered>
-            <Tab label="Student" icon={<Person />} />
-            <Tab label="Program" icon={<School />} />
-            <Tab label="Review" icon={<CheckCircle />} />
-          </Tabs>
-
-          {step === 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6">Select Student</Typography>
-              {student ? (
-                <Card sx={{ mt: 3, p: 2 }}>
-                  <CardContent>
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid item>
-                        <Avatar sx={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL_IMAGE}${student.profileImageUrl}`} />
-                      </Grid>
-                      <Grid item xs>
-                        <Typography><b>Name:</b> {student.firstName} {student.lastName}</Typography>
-                        <Typography><b>Nationality:</b> {student.nationality}</Typography>
-                        <Typography><b>Passport ID:</b> {student.passportNumber}</Typography>
-                        <Typography><b>Email:</b> {student.email}</Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              ) : (
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel>Student</InputLabel>
-                  <Select value={application.studentId} onChange={handleStudentChange}>
-                  {students.map((s) => (
-                    <MenuItem key={s.id} value={s.id}>{s.firstName} {s.lastName} - {s.nationality}</MenuItem>
-                  ))}
-                </Select>
-                </FormControl>
-              )}
-              <Box sx={{ mt: 3, display: "flex", justifyContent: "space-between" }}>
-                <Button onClick={() => navigate("/students")}>Cancel</Button>
-                <Button variant="contained" onClick={handleNext} disabled={!application.studentId}>
-                  Next
-                </Button>
-              </Box>
-            </Box>
-          )}
 
   {step === 1 && (
     <Box sx={{ mt: 3, display: "flex", gap: 3 }}>

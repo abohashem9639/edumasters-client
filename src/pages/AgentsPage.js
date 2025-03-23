@@ -280,7 +280,7 @@ const AgentsPage = () => {
               helperText={errors.phoneNumber} 
             />
 
-<FormControl fullWidth margin="normal">
+{/* <FormControl fullWidth margin="normal">
   <InputLabel>Teams</InputLabel>
   <Select
     multiple
@@ -294,7 +294,7 @@ const AgentsPage = () => {
       </MenuItem>
     ))}
   </Select>
-</FormControl>
+</FormControl> */}
 
 
             <TextField 
