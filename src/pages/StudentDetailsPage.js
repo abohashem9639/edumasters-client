@@ -164,7 +164,7 @@ const StudentDetailsPage = () => {
       <Avatar 
         src={`${process.env.REACT_APP_API_URL_IMAGE}${student.salesResponsibleProfileImageUrl || "/default-avatar.png"}`}
         alt={student.salesResponsibleName}
-        sx={{ width: 30, height: 30, marginRight: 2 }} // تخصيص حجم الصورة
+        sx={{ width: 40, height: 40, marginRight: 2 }} 
       />
       {student.salesResponsibleName}
     </>
