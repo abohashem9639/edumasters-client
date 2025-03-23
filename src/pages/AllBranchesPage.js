@@ -140,14 +140,13 @@ const ProgramFilterPage = () => {
                 borderColor: "#0056b3", // اللون عند التمرير
               },
             },
-            mb: 2, // Adjust margin for better spacing on mobile
           }}
         />
       </Box>
 
       {/* زر تنزيل PDF */}
       <Box sx={{ mb: 4 }}>
-        <Button variant="contained" color="primary" onClick={downloadPDF} sx={{ width: "100%" }}>
+        <Button variant="contained" color="primary" onClick={downloadPDF}>
           Download Programs as PDF
         </Button>
       </Box>
@@ -155,7 +154,7 @@ const ProgramFilterPage = () => {
       {/* Horizontal filter section */}
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 4, justifyContent: "space-between" }}>
         {/* Degree Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>Degree</InputLabel>
           <Select name="degree" value={filters.degree} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -169,7 +168,7 @@ const ProgramFilterPage = () => {
         </FormControl>
 
         {/* University Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>University</InputLabel>
           <Select name="universityId" value={filters.universityId} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -180,7 +179,7 @@ const ProgramFilterPage = () => {
         </FormControl>
 
         {/* Language Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>Language</InputLabel>
           <Select name="language" value={filters.language} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -198,7 +197,7 @@ const ProgramFilterPage = () => {
         </FormControl>
 
         {/* Country Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>Country</InputLabel>
           <Select name="country" value={filters.country} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -209,7 +208,7 @@ const ProgramFilterPage = () => {
         </FormControl>
 
         {/* City Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>City</InputLabel>
           <Select name="city" value={filters.city} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -220,7 +219,7 @@ const ProgramFilterPage = () => {
         </FormControl>
 
         {/* Status Filter */}
-        <FormControl sx={{ minWidth: 160, flex: 1 }} size="small">
+        <FormControl sx={{ minWidth: 160 }} size="small">
           <InputLabel>Status</InputLabel>
           <Select name="status" value={filters.status} onChange={handleFilterChange}>
             <MenuItem value="">All</MenuItem>
@@ -245,70 +244,72 @@ const ProgramFilterPage = () => {
               {filteredBranches.map((branch) => {
                 const university = universities.find((u) => u.id === branch.universityId);
                 return (
-                  <Card key={branch.id} sx={{
-                    mb: 1,
-                    p: 1,
-                    display: "grid",
-                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr 1fr" }, // تعديل التنسيق بناءً على حجم الشاشة
-                    alignItems: "center",
-                    gap: 2,
-                    border: "1px solid #ddd",
-                    borderRadius: 2,
-                    backgroundColor: "#fff",
-                    boxShadow: "none",
-                  }}>
-                    {/* الجامعة واسم الفرع */}
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Avatar
-                        src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`}
-                        sx={{ width: 60, height: 60 }}
-                      />
-                      <Typography variant="body2" sx={{ fontWeight: "bold", marginBottom: 0 }}>
-                        {branch.branchName}
-                      </Typography>
-                    </Box>
+<Card key={branch.id} sx={{
+  mb: 1,
+  p: 1,
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr 1fr", // تباعد متساوي بين الأعمدة
+  alignItems: "center",
+  gap: 2,
+  border: "1px solid #ddd",
+  borderRadius: 2,
+  backgroundColor: "#fff",
+  boxShadow: "none",
+}}>
+  {/* الجامعة واسم الفرع */}
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <Avatar
+      src={`${process.env.REACT_APP_API_URL_IMAGE}${university?.logoUrl}`}
+      sx={{ width: 60, height: 60 }}
+    />
+    <Typography variant="body2" sx={{ fontWeight: "bold", marginBottom: 0 }}>
+      {branch.branchName}
+    </Typography>
+  </Box>
 
-                    {/* اسم الجامعة والعنوان */}
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: "bold", marginBottom: 1 }}>
-                        {university?.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
-                        {university?.country}, {university?.city}
-                      </Typography>
-                    </Box>
+  {/* اسم الجامعة والعنوان */}
+  <Box>
+    <Typography variant="body2" sx={{ fontWeight: "bold", marginBottom: 1 }}>
+      {university?.name}
+    </Typography>
+    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
+      {university?.country}, {university?.city}
+    </Typography>
+  </Box>
 
-                    {/* الدرجة واللغة */}
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
-                        <b>Degree:</b> {branch.levels}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
-                        <b>Language:</b> {branch.languages.join(", ")}
-                      </Typography>
-                    </Box>
+  {/* الدرجة واللغة */}
+  <Box>
+    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
+      <b>Degree:</b> {branch.levels}
+    </Typography>
+    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0 }}>
+      <b>Language:</b> {branch.languages.join(", ")}
+    </Typography>
+  </Box>
 
-                    {/* الـ Payment و الـ Status في العمود الرابع */}
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
-                        <b>Status:</b> <span style={{ color: branch.status === "OPEN" ? "#28a745" : "#dc3545" }}>
-                          {branch.status}
-                        </span>
-                      </Typography>
-                      <Typography variant="body2" sx={{
-                        textDecoration: branch.discountPrice ? "line-through" : "none",
-                        color: branch.discountPrice ? "#dc3545" : "#000"
-                      }}>
-                        <b>Payment:</b> {branch.annualFee} {branch.currency}
-                      </Typography>
-                      {/* عرض الخصم إذا كان موجودًا و ليس صفرًا */}
-                      {branch.discountPrice && branch.discountPrice !== 0 && (
-                        <Typography variant="body2" sx={{ fontWeight: "bold", color: "#007bff" }}>
-                          Disc. Price: {branch.discountPrice} {branch.currency}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Card>
+  {/* الـ Payment و الـ Status في العمود الرابع */}
+  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
+      <b>Status:</b> <span style={{ color: branch.status === "OPEN" ? "#28a745" : "#dc3545" }}>
+        {branch.status}
+      </span>
+    </Typography>
+    <Typography variant="body2" sx={{
+      textDecoration: branch.discountPrice ? "line-through" : "none",
+      color: branch.discountPrice ? "#dc3545" : "#000"
+    }}>
+      <b>Payment:</b> {branch.annualFee} {branch.currency}
+    </Typography>
+    {/* عرض الخصم إذا كان موجودًا و ليس صفرًا */}
+    {branch.discountPrice && branch.discountPrice !== 0 && (
+      <Typography variant="body2" sx={{ fontWeight: "bold", color: "#007bff" }}>
+       Disc. Price: {branch.discountPrice} {branch.currency}
+      </Typography>
+    )}
+  </Box>
+</Card>
+
+
                 );
               })}
             </Box>
