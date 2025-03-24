@@ -167,7 +167,6 @@ const AddApplicationPage = () => {
       console.log("Application Data Sent:", applicationData);
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL_LOCAL}/Applications`, applicationData);
-      console.log("DDDDDDData:", response.data);
 
       alert("Application submitted successfully!");
       navigate(`/students/${application.studentId}`);
